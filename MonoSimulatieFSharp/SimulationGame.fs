@@ -3,33 +3,8 @@ module game
 
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
-open Microsoft.Xna.Framework.Input
-
-type GameStatus = 
-    {
-        background: Texture2D
-        truck: Texture2D
-        position: Vector2
-        Velocity: Vector2
-    }
-    member this.Update dt =
-        {
-            background = this.background
-            truck = this.truck
-            position = new Vector2(this.position.X + this.Velocity.X * dt, this.position.Y + this.Velocity.Y * dt)
-            Velocity = this.Velocity
-        }
-
-    member this.Draw (spriteBatch:SpriteBatch) =
-        spriteBatch.Draw(this.background, Vector2.Zero, Color.White);
-
-        let effect =
-            if this.Velocity.X < 0.f then
-                SpriteEffects.FlipHorizontally
-            else
-                SpriteEffects.None
-        spriteBatch.Draw(this.truck, this.position, System.Nullable(), Color.White, 0.f, Vector2.Zero, 0.3f, effect, 0.f)
-        ()
+open GameStatus
+open Truck
 
 
 
@@ -53,9 +28,9 @@ type SimulationGame () as this =
         do spriteBatch <- new SpriteBatch(this.GraphicsDevice)
 
         let background = this.Content.Load<Texture2D>("background.png")
-        let truck = this.Content.Load<Texture2D>("volvo.png")
+        let truck = {texture = this.Content.Load<Texture2D>("volvo.png"); position=new Vector2(0.f,80.f); velocity=new Vector2(30.f,0.f)}
 
-        gameStatus <- {background=background;truck=truck;position=new Vector2(0.f,80.f); Velocity=new Vector2(30.f,0.f)}
+        gameStatus <- {background=background;truck=truck}
 
         ()
 
