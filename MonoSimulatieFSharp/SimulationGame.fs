@@ -6,11 +6,6 @@ open Microsoft.Xna.Framework.Graphics
 open GameStatus
 open Truck
 
-
-
-
-
-
 type SimulationGame () as this =
     inherit Game()
 
@@ -28,9 +23,10 @@ type SimulationGame () as this =
         do spriteBatch <- new SpriteBatch(this.GraphicsDevice)
 
         let background = this.Content.Load<Texture2D>("background.png")
-        let truck = {texture = this.Content.Load<Texture2D>("volvo.png"); position=new Vector2(0.f,80.f); velocity=new Vector2(30.f,0.f)}
+        let truckTexture = this.Content.Load<Texture2D>("volvo.png")
+        let truck = {position=new Vector2(0.f,80.f); velocity=new Vector2(30.f,0.f)}
 
-        gameStatus <- {background=background;truck=truck}
+        gameStatus <- {background=background; truck=truck; truckDrawer=getTruckDrawer truckTexture }
 
         ()
 

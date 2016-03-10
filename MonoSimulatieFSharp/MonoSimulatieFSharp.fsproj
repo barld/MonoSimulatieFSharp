@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Truck.fs" />
+    <Compile Include="Factory.fs" />
     <Compile Include="GameStatus.fs" />
     <Compile Include="SimulationGame.fs" />
     <Compile Include="Program.fs" />
