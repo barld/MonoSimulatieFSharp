@@ -6,6 +6,7 @@ open Microsoft.Xna.Framework.Graphics
 open GameStatus
 open Truck
 open Factory
+open UnitOfMeasures
 
 type SimulationGame () as this =
     inherit Game()
@@ -48,7 +49,8 @@ type SimulationGame () as this =
         ()
 
     override this.Update (gameTime) =
-        gameStatus <- gameStatus.Update(gameTime.ElapsedGameTime.TotalSeconds |> float32)
+        let dt = ((gameTime.ElapsedGameTime.TotalSeconds |> float32) * 1.0f<sec>)
+        gameStatus <- gameStatus.Update dt
         ()
 
     /// gametime is deltatime between the last and this frame

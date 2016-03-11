@@ -2,17 +2,18 @@
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 open Truck
+open UnitOfMeasures
 
-type RawFactory = 
+type RawFactory<[<Measure>]'t> = 
     {   
         Position: Vector2
-        Production: float32
-        inStock: float32
+        Production: float32<'t/sec>
+        inStock: float32<'t>
     }
 
 type Factory =
-    | Mine of RawFactory
-    | Ikea of RawFactory
+    | Mine of RawFactory<ore>
+    | Ikea of RawFactory<product>
 
     member this.Update dt =
         match this with
@@ -22,14 +23,14 @@ type Factory =
     member this.GetTruck () =
         match this with 
         | Mine rf -> 
-            if rf.inStock > 60000.f then
-                Mine {rf with inStock = rf.inStock - 60000.f } ,
+            if rf.inStock > 80000.f<ore> then
+                Mine {rf with inStock = rf.inStock - 60000.f<ore> } ,
                 Some {position = (Factory.getGetTruckLoadPosition this); velocity = (Factory.getTruckVelocity this); container = Some OreContainer}
             else
                 Mine rf, None
         | Ikea rf -> 
-            if rf.inStock > 60000.f then
-                Ikea {rf with inStock = rf.inStock - 60000.f } ,
+            if rf.inStock > 90000.f<product> then
+                Ikea {rf with inStock = rf.inStock - 60000.f<product> } ,
                 Some {position = (Factory.getGetTruckLoadPosition this); velocity = (Factory.getTruckVelocity this); container = Some ProductContainer}
             else
                 Ikea rf, None
@@ -56,10 +57,10 @@ let getFactorDrawer (mine:Texture2D) (ikea:Texture2D) (mine_cart:Texture2D) (pro
 
         match factory with
         | Mine rf ->
-            for i in 1.f..(rf.inStock / 10000.f) do                
+            for i in 1.f..(rf.inStock / 10000.f<ore>) do                
                 spriteBatch.Draw(mine_cart, Vector2(10.f,20.f*i), System.Nullable(), Color.White, 0.f, Vector2.Zero, 0.15f, SpriteEffects.None, 0.f)
         | Ikea rf ->
-            for i in 1.f..(rf.inStock / 10000.f) do
+            for i in 1.f..(rf.inStock / 10000.f<product>) do
                 spriteBatch.Draw(product_box, Vector2(750.f,400.f - 20.f*i), System.Nullable(), Color.White, 0.f, Vector2.Zero, 0.15f, SpriteEffects.None, 0.f)
         ()
 
@@ -72,14 +73,14 @@ let baseMine =
     Mine 
         {
             Position=new Vector2(60.f, 40.f)
-            Production = 15000.f
-            inStock = 0.f
+            Production = 15000.f<ore/sec>
+            inStock = 0.f<ore>
         }
 
 let baseIkea = 
     Ikea 
         {
             Position=new Vector2(600.f, 320.f)
-            Production = 20000.f
-            inStock = 0.f
+            Production = 20000.f<product/sec>
+            inStock = 0.f<product>
         }

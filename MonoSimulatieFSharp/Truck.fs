@@ -1,6 +1,7 @@
 ﻿module Truck
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
+open UnitOfMeasures
 
 type Container =
     | OreContainer
@@ -13,10 +14,10 @@ type Truck =
         velocity: Vector2
         container: Option<Container>
     }
-    member this.Update dt =
+    member this.Update (dt:float32<sec>) =
         {
-            this with position = new Vector2(   this.position.X + this.velocity.X * dt, //x
-                                                this.position.Y + this.velocity.Y * dt) //y
+            this with position = new Vector2(   this.position.X + this.velocity.X * (dt |> float32), //x
+                                                this.position.Y + this.velocity.Y * (dt |> float32)) //y
         }
 
 let getTruckDrawer (truckTexture:Texture2D) productContainer oreContainer =
