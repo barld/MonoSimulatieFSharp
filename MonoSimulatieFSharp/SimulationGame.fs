@@ -5,6 +5,7 @@ open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 open GameStatus
 open Truck
+open Factory
 
 type SimulationGame () as this =
     inherit Game()
@@ -23,10 +24,26 @@ type SimulationGame () as this =
         do spriteBatch <- new SpriteBatch(this.GraphicsDevice)
 
         let background = this.Content.Load<Texture2D>("background.png")
-        let truckTexture = this.Content.Load<Texture2D>("volvo.png")
-        let truck = {position=new Vector2(0.f,80.f); velocity=new Vector2(30.f,0.f)}
+        let truckDrawer = 
+            getTruckDrawer 
+                (this.Content.Load<Texture2D> "volvo.png")
+                (this.Content.Load<Texture2D> "product_container.png")
+                (this.Content.Load<Texture2D> "ore_container.png")
 
-        gameStatus <- {background=background; truck=truck; truckDrawer=getTruckDrawer truckTexture }
+        gameStatus <- 
+            {
+                Background=background
+                Trucks= []
+                TruckDrawer=truckDrawer spriteBatch
+                FactoryDrawer = 
+                    getFactorDrawer 
+                        (this.Content.Load<Texture2D> "mine.png") 
+                        (this.Content.Load<Texture2D> "ikea.png")
+                        (this.Content.Load<Texture2D> "mine_cart.png")
+                        (this.Content.Load<Texture2D> "product_box.png")
+                         spriteBatch
+                Factorys = [baseMine;baseIkea]
+            }
 
         ()
 
