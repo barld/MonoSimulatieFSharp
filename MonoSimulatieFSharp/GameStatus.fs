@@ -17,7 +17,7 @@ type GameStatus =
     member this.Update dt =
         let trucks = 
             this.Trucks 
-            |> List.filter (fun truck -> truck.position.X > -50.f && truck.position.X < 1000.f)
+            |> List.filter (fun truck -> truck.Position.X > -50.f && truck.Position.X < 1000.f)
             |> List.map (fun truck -> truck.Update dt)
 
         let newTrucks = this.Factorys |> List.map (fun fact -> fact.GetTruck())

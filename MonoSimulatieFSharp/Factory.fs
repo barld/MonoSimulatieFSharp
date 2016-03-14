@@ -4,6 +4,24 @@ open Microsoft.Xna.Framework.Graphics
 open Truck
 open UnitOfMeasures
 
+let baseTruckMine =
+    {
+        Position = new Vector2(210.f,70.f)
+        Acceleration = 5.f<pixel/sec^2> 
+        Velocity = 5.f<pixel/sec>
+        Direction = Direction.Right
+        Container = Some OreContainer
+    }
+
+let baseTruckIkea =
+    {
+        Position = new Vector2(450.f,320.f)
+        Acceleration = 6.f<pixel/sec^2> 
+        Velocity = 6.f<pixel/sec>
+        Direction = Direction.Left
+        Container = Some ProductContainer
+    }
+
 type RawFactory<[<Measure>]'t> = 
     {   
         Position: Vector2
@@ -25,25 +43,16 @@ type Factory =
         | Mine rf -> 
             if rf.inStock > 80000.f<ore> then
                 Mine {rf with inStock = rf.inStock - 60000.f<ore> } ,
-                Some {position = (Factory.getGetTruckLoadPosition this); velocity = (Factory.getTruckVelocity this); container = Some OreContainer}
+                Some baseTruckMine
             else
                 Mine rf, None
         | Ikea rf -> 
             if rf.inStock > 90000.f<product> then
                 Ikea {rf with inStock = rf.inStock - 60000.f<product> } ,
-                Some {position = (Factory.getGetTruckLoadPosition this); velocity = (Factory.getTruckVelocity this); container = Some ProductContainer}
+                Some baseTruckIkea
             else
                 Ikea rf, None
 
-    static member getGetTruckLoadPosition =
-        function
-        | Mine _ -> Vector2(210.f,70.f)
-        | Ikea _ -> Vector2(450.f,320.f)
-
-    static member getTruckVelocity =
-        function
-        | Mine _ -> Vector2(80.f, 0.f)
-        | Ikea _ -> Vector2(-60.f, 0.f)
 
 
 let getFactorDrawer (mine:Texture2D) (ikea:Texture2D) (mine_cart:Texture2D) (product_box:Texture2D) =
@@ -73,7 +82,7 @@ let baseMine =
     Mine 
         {
             Position=new Vector2(60.f, 40.f)
-            Production = 15000.f<ore/sec>
+            Production = 7000.f<ore/sec>
             inStock = 0.f<ore>
         }
 
@@ -81,6 +90,6 @@ let baseIkea =
     Ikea 
         {
             Position=new Vector2(600.f, 320.f)
-            Production = 20000.f<product/sec>
+            Production = 10000.f<product/sec>
             inStock = 0.f<product>
         }
