@@ -87,7 +87,9 @@
     <Content Include="Content\volvo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Content\sun.png" />
+    <None Include="Content\sun.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

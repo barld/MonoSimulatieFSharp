@@ -25,6 +25,7 @@ type SimulationGame () as this =
         do spriteBatch <- new SpriteBatch(this.GraphicsDevice)
 
         let background = this.Content.Load<Texture2D>("background.png")
+        let sun = this.Content.Load<Texture2D>("sun.png")
         let truckDrawer = 
             getTruckDrawer 
                 (this.Content.Load<Texture2D> "volvo.png")
@@ -34,6 +35,7 @@ type SimulationGame () as this =
         gameStatus <- 
             {
                 Background = background
+                Sun = sun
                 Trucks = []
                 TruckDrawer=truckDrawer spriteBatch
                 FactoryDrawer = 
