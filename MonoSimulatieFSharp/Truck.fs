@@ -11,6 +11,7 @@ type Direction =
     | Left
     | Right
 
+
 type Truck =
     {
         Position: Vector2

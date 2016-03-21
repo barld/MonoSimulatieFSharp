@@ -33,8 +33,8 @@ type SimulationGame () as this =
 
         gameStatus <- 
             {
-                Background=background
-                Trucks= []
+                Background = background
+                Trucks = []
                 TruckDrawer=truckDrawer spriteBatch
                 FactoryDrawer = 
                     getFactorDrawer 
@@ -44,6 +44,7 @@ type SimulationGame () as this =
                         (this.Content.Load<Texture2D> "product_box.png")
                          spriteBatch
                 Factorys = [baseMine;baseIkea]
+                Time = 0.f<sec>
             }
 
         ()

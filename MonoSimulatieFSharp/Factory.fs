@@ -6,7 +6,7 @@ open UnitOfMeasures
 
 let baseTruckMine =
     {
-        Position = new Vector2(210.f,70.f)
+        Position = new Vector2(210.f,135.f)
         Acceleration = 5.f<pixel/sec^2> 
         Velocity = 5.f<pixel/sec>
         Direction = Direction.Right
@@ -15,8 +15,8 @@ let baseTruckMine =
 
 let baseTruckIkea =
     {
-        Position = new Vector2(450.f,320.f)
-        Acceleration = 6.f<pixel/sec^2> 
+        Position = new Vector2(450.f,355.f)
+        Acceleration = 8.f<pixel/sec^2> 
         Velocity = 6.f<pixel/sec>
         Direction = Direction.Left
         Container = Some ProductContainer
@@ -33,10 +33,18 @@ type Factory =
     | Mine of RawFactory<ore>
     | Ikea of RawFactory<product>
 
-    member this.Update dt =
+    member this.Update dt time =
         match this with
-        | Mine rf -> Mine {rf with inStock = rf.inStock + rf.Production*dt }
-        | Ikea rf -> Ikea {rf with inStock = rf.inStock + rf.Production*dt }
+        | Mine rf -> 
+            if (DayParts.getDayPart time) = DayParts.DayPart.Morning || (DayParts.getDayPart time) = DayParts.DayPart.AfterNoon then
+                Mine {rf with inStock = rf.inStock + rf.Production*dt }
+            else
+                this
+        | Ikea rf -> 
+            if (DayParts.getDayPart time) = DayParts.DayPart.Morning || (DayParts.getDayPart time) = DayParts.DayPart.AfterNoon then
+                Ikea {rf with inStock = rf.inStock + rf.Production*dt }
+            else
+                this
         
     member this.GetTruck () =
         match this with 
@@ -82,7 +90,7 @@ let baseMine =
     Mine 
         {
             Position=new Vector2(60.f, 40.f)
-            Production = 7000.f<ore/sec>
+            Production = 9000.f<ore/sec>
             inStock = 0.f<ore>
         }
 
@@ -90,6 +98,6 @@ let baseIkea =
     Ikea 
         {
             Position=new Vector2(600.f, 320.f)
-            Production = 10000.f<product/sec>
+            Production = 13000.f<product/sec>
             inStock = 0.f<product>
         }

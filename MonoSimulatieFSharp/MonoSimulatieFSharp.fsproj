@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="UnitOfMeasures.fs" />
+    <Compile Include="DayParts.fs" />
     <Compile Include="Truck.fs" />
     <Compile Include="Factory.fs" />
     <Compile Include="GameStatus.fs" />
@@ -86,6 +87,7 @@
     <Content Include="Content\volvo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Content\sun.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -12,7 +12,7 @@ type GameStatus =
         Factorys: list<Factory>
         TruckDrawer: (Truck->Unit)
         FactoryDrawer: (Factory->Unit)
-
+        Time: float32<sec>
     }
     member this.Update dt =
         let trucks = 
@@ -28,10 +28,12 @@ type GameStatus =
                 Trucks = trucks'
 
                 Factorys = factorys
-                |> List.map (fun fact -> fact.Update dt)
+                |> List.map (fun fact -> fact.Update dt this.Time)
+                Time = DayParts.updateDayPart this.Time dt
         }
 
     member this.Draw (spriteBatch:SpriteBatch) =
+        printfn "%A" (DayParts.getDayPart this.Time)
         spriteBatch.Draw(this.Background, Vector2.Zero, Color.White);
         this.Trucks |> List.iter this.TruckDrawer
         this.Factorys |> List.iter this.FactoryDrawer
