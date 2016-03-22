@@ -3,6 +3,7 @@ open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 open Truck
 open UnitOfMeasures
+open DayParts
 
 let baseTruckMine =
     {
@@ -22,10 +23,13 @@ let baseTruckIkea =
         Container = Some ProductContainer
     }
 
+
+
+
 type RawFactory<[<Measure>]'t> = 
     {   
         Position: Vector2
-        Production: float32<'t/sec>
+        GetProduction: DayPart -> float32<'t/sec>
         inStock: float32<'t>
     }
 
@@ -36,15 +40,10 @@ type Factory =
     member this.Update dt time =
         match this with
         | Mine rf -> 
-            if (DayParts.getDayPart time) = DayParts.DayPart.Morning || (DayParts.getDayPart time) = DayParts.DayPart.AfterNoon then
-                Mine {rf with inStock = rf.inStock + rf.Production*dt }
-            else
-                this
+            Mine {rf with inStock = rf.inStock + (rf.GetProduction (getDayPart time)) * dt }
         | Ikea rf -> 
-            if (DayParts.getDayPart time) = DayParts.DayPart.Morning || (DayParts.getDayPart time) = DayParts.DayPart.AfterNoon then
-                Ikea {rf with inStock = rf.inStock + rf.Production*dt }
-            else
-                this
+            Ikea {rf with inStock = rf.inStock + (rf.GetProduction (getDayPart time)) * dt }
+            
         
     member this.GetTruck () =
         match this with 
@@ -83,21 +82,32 @@ let getFactorDrawer (mine:Texture2D) (ikea:Texture2D) (mine_cart:Texture2D) (pro
 
     FatoryDrawer
 
-
-
+let getProductionSpeed dayPart =
+    match dayPart with
+    | Night -> 1000.f<ore/sec>
+    | Morning -> 8000.f<ore/sec>
+    | AfterNoon -> 10000.f<ore/sec>
+    | Evening -> 3000.f<ore/sec>
 
 let baseMine =
     Mine 
         {
             Position=new Vector2(60.f, 40.f)
-            Production = 9000.f<ore/sec>
+            GetProduction = getProductionSpeed
             inStock = 0.f<ore>
         }
+
+let getProductionSpeedBaseMine dayPart =
+    match dayPart with
+    | Night -> 1000.f<product/sec>
+    | Morning -> 8000.f<product/sec>
+    | AfterNoon -> 2000.f<product/sec>
+    | Evening -> 15000.f<product/sec>
 
 let baseIkea = 
     Ikea 
         {
             Position=new Vector2(600.f, 320.f)
-            Production = 13000.f<product/sec>
+            GetProduction = getProductionSpeedBaseMine
             inStock = 0.f<product>
         }
