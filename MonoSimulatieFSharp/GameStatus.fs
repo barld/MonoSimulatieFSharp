@@ -34,7 +34,6 @@ type GameStatus =
         }
 
     member this.Draw (spriteBatch:SpriteBatch) =
-        printfn "%A" (DayParts.getDayPart this.Time)
         spriteBatch.Draw(this.Background, Vector2.Zero, Color.White);
         this.Trucks |> List.iter this.TruckDrawer
         this.Factorys |> List.iter this.FactoryDrawer

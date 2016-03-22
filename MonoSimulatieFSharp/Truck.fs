@@ -22,11 +22,12 @@ type Truck =
     }
     member this.Update (dt:float32<sec>) =
         let velocity = this.Velocity + this.Acceleration * dt
-        let distance = if this.Direction = Direction.Right then (this.Velocity * dt) |> float32 else ((this.Velocity * dt) |> float32) * -1.f
+        let distance = match this.Direction with
+            | Left -> this.Velocity * dt * -1.0f
+            | Right -> this.Velocity * dt
         {
             this with 
-                Position = new Vector2(   this.Position.X + distance, //x
-                                                this.Position.Y) //y
+                Position = new Vector2(this.Position.X + (distance |> float32), this.Position.Y) //x,y
                 Velocity = velocity
         }
 
