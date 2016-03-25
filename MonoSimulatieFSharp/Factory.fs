@@ -37,28 +37,14 @@ type Factory =
     | Mine of RawFactory<ore>
     | Ikea of RawFactory<product>
 
-    member this.Update dt time =
-        match this with
+    static member Update dt time factory =
+        match factory with
         | Mine rf -> 
             Mine {rf with inStock = rf.inStock + (rf.GetProduction (getDayPart time)) * dt }
         | Ikea rf -> 
             Ikea {rf with inStock = rf.inStock + (rf.GetProduction (getDayPart time)) * dt }
             
-        
-    member this.GetTruck () =
-        match this with 
-        | Mine rf -> 
-            if rf.inStock > 80000.f<ore> then
-                Mine {rf with inStock = rf.inStock - 60000.f<ore> } ,
-                Some baseTruckMine
-            else
-                Mine rf, None
-        | Ikea rf -> 
-            if rf.inStock > 90000.f<product> then
-                Ikea {rf with inStock = rf.inStock - 60000.f<product> } ,
-                Some baseTruckIkea
-            else
-                Ikea rf, None
+       
 
 
 

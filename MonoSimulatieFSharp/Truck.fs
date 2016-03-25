@@ -20,16 +20,18 @@ type Truck =
         Direction: Direction
         Container: Option<Container>
     }
-    member this.Update (dt:float32<sec>) =
-        let velocity = this.Velocity + this.Acceleration * dt
-        let distance = match this.Direction with
-            | Left -> this.Velocity * dt * -1.0f
-            | Right -> this.Velocity * dt
+    static member Update (dt:float32<sec>) truck =
+        let velocity = truck.Velocity + truck.Acceleration * dt
+        let distance = 
+            match truck.Direction with
+            | Left -> truck.Velocity * dt * -1.0f
+            | Right -> truck.Velocity * dt
         {
-            this with 
-                Position = new Vector2(this.Position.X + (distance |> float32), this.Position.Y) //x,y
+            truck with 
+                Position = new Vector2(truck.Position.X + (distance |> float32), truck.Position.Y) //x,y
                 Velocity = velocity
         }
+
 
 let getTruckDrawer (truckTexture:Texture2D) productContainer oreContainer =
     let truckDrawer (spriteBatch:SpriteBatch) (truck:Truck) =

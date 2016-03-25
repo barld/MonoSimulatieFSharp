@@ -15,23 +15,6 @@ type GameStatus =
         Time: float32<sec>
         Sun: Texture2D
     }
-    member this.Update dt =
-        let trucks = 
-            this.Trucks 
-            |> List.filter (fun truck -> truck.Position.X > -50.f && truck.Position.X < 1000.f)
-            |> List.map (fun truck -> truck.Update dt)
-
-        let newTrucks = this.Factorys |> List.map (fun fact -> fact.GetTruck())
-        let factorys = newTrucks |> List.map fst
-        let trucks' = (newTrucks |> List.map snd |> List.choose id) @ trucks
-        {
-            this with
-                Trucks = trucks'
-
-                Factorys = factorys
-                |> List.map (fun fact -> fact.Update dt this.Time)
-                Time = DayParts.updateDayPart this.Time dt
-        }
 
     member this.Draw (spriteBatch:SpriteBatch) =
         spriteBatch.Draw(this.Background, Vector2.Zero, Color.White);

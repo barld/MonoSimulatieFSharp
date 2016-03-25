@@ -4,9 +4,9 @@ module game
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 open GameStatus
-open Truck
 open Factory
 open UnitOfMeasures
+open StateMonad
 
 type SimulationGame () as this =
     inherit Game()
@@ -27,7 +27,7 @@ type SimulationGame () as this =
         let background = this.Content.Load<Texture2D>("background.png")
         let sun = this.Content.Load<Texture2D>("sun.png")
         let truckDrawer = 
-            getTruckDrawer 
+            Truck.getTruckDrawer 
                 (this.Content.Load<Texture2D> "volvo.png")
                 (this.Content.Load<Texture2D> "product_container.png")
                 (this.Content.Load<Texture2D> "ore_container.png")
@@ -53,7 +53,24 @@ type SimulationGame () as this =
 
     override this.Update (gameTime) =
         let dt = ((gameTime.ElapsedGameTime.TotalSeconds |> float32) * 1.0f<sec>)
-        gameStatus <- gameStatus.Update dt
+
+        do gameStatus <- 
+            gameStatus |> 
+            stateFlow
+                {
+                    let! time' = Updates.UpdateTime dt
+
+                    do! Updates.RemoveTrucksOutOfScreen ()
+                    do! Updates.GetNewTrucks ()
+                    do! Updates.DriveTrucks dt
+                    do! Updates.FactorysProduce dt time'
+
+                    
+
+                    return ()
+                }
+            |> snd
+
         ()
 
     /// gametime is deltatime between the last and this frame

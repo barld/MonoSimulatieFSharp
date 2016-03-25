@@ -17,9 +17,6 @@ let getDayPart (time:float32<sec>) =
     | n when n < 9.f<sec> -> AfterNoon
     | _ -> Evening
 
-let updateDayPart time (dt:float32<sec>) =
-    (time + dt) % 12.f<sec>
-
 let drawSun (time:float32<sec>) (spriteBatch:SpriteBatch) (sunTexture:Texture2D) =
     let y = 5.f*((time |> float32)-6.f)**2.f
     let position = new Vector2(((time - 3.f<sec>) |> float32) * 134.f, y)
