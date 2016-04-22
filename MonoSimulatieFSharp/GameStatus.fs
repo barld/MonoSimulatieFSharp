@@ -16,9 +16,16 @@ type GameStatus =
         Sun: Texture2D
     }
     member this.Update dt =
+        let rec filterTrucksInScreen (trucks: Truck list) : Truck list=
+            match trucks with
+            | [] -> []
+            | truck::tail ->
+                match truck.Position.X > -50.f && truck.Position.X < 1000.f with
+                | true -> truck :: filterTrucksInScreen tail
+                | false -> filterTrucksInScreen tail
         let trucks = 
             this.Trucks 
-            |> List.filter (fun truck -> truck.Position.X > -50.f && truck.Position.X < 1000.f)
+            |> filterTrucksInScreen
             |> List.map (fun truck -> truck.Update dt)
 
         let newTrucks = this.Factorys |> List.map (fun fact -> fact.GetTruck())
@@ -27,7 +34,6 @@ type GameStatus =
         {
             this with
                 Trucks = trucks'
-
                 Factorys = factorys
                 |> List.map (fun fact -> fact.Update dt this.Time)
                 Time = DayParts.updateDayPart this.Time dt
