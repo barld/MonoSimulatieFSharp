@@ -48,7 +48,6 @@ type SimulationGame () as this =
                 Factorys = [baseMine;baseIkea]
                 Time = 0.f<sec>
             }
-
         ()
 
     override this.Update (gameTime) =
